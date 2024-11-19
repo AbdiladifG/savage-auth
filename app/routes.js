@@ -1,7 +1,23 @@
+const { get } = require('lodash');
+
 module.exports = function(app, passport, db) {
 
 // normal routes ===============================================================
-
+    const axios = require('axios')
+    async function getCharacters() {
+      try {
+        const response = await axios.get('https://bobsburgers-api.herokuapp.com/characters/?limit=40&skip=6');
+        return response.data
+      } catch (error) {
+        throw error
+      }
+    }
+    let characters
+    getCharacters()
+    .then(data => {
+      characters = data
+    })
+    .catch(error => console.error(error));
     // show the home page (will also have our login links)
     app.get('/', function(req, res) {
         res.render('index.ejs');
@@ -9,10 +25,13 @@ module.exports = function(app, passport, db) {
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
-        db.collection('messages').find().toArray((err, result) => {
+        db.collection('messages').find().sort({thumbUp: -1}).toArray((err, result) => {
+
           if (err) return console.log(err)
           res.render('profile.ejs', {
-            user : req.user,
+            name: req.name,
+            img: req.img,
+            characters: characters,
             messages: result
           })
         })
@@ -28,17 +47,18 @@ module.exports = function(app, passport, db) {
 
 // message board routes ===============================================================
 
-    app.post('/messages', (req, res) => {
-      db.collection('messages').save({name: req.body.name, msg: req.body.msg, thumbUp: 0, thumbDown:0}, (err, result) => {
+    app.post('/favorite', (req, res) => {
+      db.collection('messages').insertOne({name: req.body.name, img: req.body.img, thumbUp: 0}, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database')
         res.redirect('/profile')
       })
     })
+    
 
     app.put('/messages', (req, res) => {
       db.collection('messages')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
+      .findOneAndUpdate({name: req.body.name}, {
         $set: {
           thumbUp:req.body.thumbUp + 1
         }
@@ -50,9 +70,23 @@ module.exports = function(app, passport, db) {
         res.send(result)
       })
     })
+    app.put('/thumbDown', (req, res) => {
+      db.collection('messages')
+      .findOneAndUpdate({name: req.body.name}, {
+        $set: {
+          thumbUp:req.body.thumbUp - 1
+        }
+      }, {
+        sort: {_id: -1},
+        upsert: true
+      }, (err, result) => {
+        if (err) return res.send(err)
+        res.send(result)
+      })
+    })
 
     app.delete('/messages', (req, res) => {
-      db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+      db.collection('messages').findOneAndDelete({name: req.body.name}, (err, result) => {
         if (err) return res.send(500, err)
         res.send('Message deleted!')
       })

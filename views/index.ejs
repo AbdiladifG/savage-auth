@@ -1,25 +1,65 @@
 <!doctype html>
 <html>
 <head>
-    <title>21 Savage Fan Site</title>
+    <title>Bob's Burgers Fan Site</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .jumbotron {
+            background-color: #FFE4C4;  /* Light peachy color that matches the show's palette */
+            padding: 2rem;
+        }
+        
+        .hero-image {
+            max-width: 400px;
+            border-radius: 8px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            margin: 10px;
+            background-color: #FF6B6B;  /* Reddish color matching Bob's restaurant */
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #FF4F4F;
+            transform: scale(1.05);
+        }
+        
+        h1 {
+            color: #4A4A4A;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .fa {
+            margin-right: 8px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-
-    <div class="jumbotron text-center">
-        <h1>21 Savage Fan Site</h1>
-        <img src="img/savage21.jpg" alt="21 Savage Profile Photo">
-
-        <p>Login or Signup:</p>
-
-        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span>Login</a>
-        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span>Signup</a>
-
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1>Welcome to Bob's Burgers Fan Site</h1>
+            <img src="https://assets.foxdcg.com/dpp-uploaded/images/bobs-burgers/D_SER000856DLJP_chip_ENT_bob%27s_burgers_s15_2024-keyart.jpg?fit=inside%7C*:575" alt="Bob's Burgers Family" class="hero-image">
+            
+            <p class="lead">Join our community of burger-loving fans!</p>
+            
+            <div class="auth-buttons">
+                <a href="/login" class="btn btn-lg">
+                    <span class="fa fa-user"></span>Login
+                </a>
+                <a href="/signup" class="btn btn-lg">
+                    <span class="fa fa-user-plus"></span>Signup
+                </a>
+            </div>
+        </div>
     </div>
-
-</div>
 </body>
 </html>
